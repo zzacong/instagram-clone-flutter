@@ -1,6 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:instagram_flutter/resources/auth_methods.dart';
 import 'package:instagram_flutter/utils/colors.dart';
+import 'package:instagram_flutter/utils/utils.dart';
 import 'package:instagram_flutter/widgets/text_field_input.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -15,6 +20,32 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
+  Uint8List? _image;
+  bool _isLoading = false;
+
+  void selectImage() async {
+    Uint8List? img = await pickImage(ImageSource.gallery);
+    if (img != null) {
+      setState(() => _image = img);
+    }
+  }
+
+  void onSignUp() async {
+    setState(() => _isLoading = true);
+    var res = await AuthMethods.signUp(
+      email: _emailController.text,
+      password: _passwordController.text,
+      username: _usernameController.text,
+      bio: _bioController.text,
+      file: _image!,
+    );
+    print(res);
+
+    setState(() => _isLoading = false);
+    if (res != 'success') {
+      showSnackBar(res, context);
+    }
+  }
 
   @override
   void dispose() {
@@ -48,16 +79,22 @@ class _SignupScreenState extends State<SignupScreen> {
               // circular avatar widget
               Stack(
                 children: <Widget>[
-                  const CircleAvatar(
-                    radius: 64,
-                    backgroundImage: NetworkImage(
-                        'https://lh3.googleusercontent.com/s_iaSJMikFWY2Fc88AeHtqGRltmo-msD622p7P-2mg8YQI6MStQ4tQrtOb6SFxCpzITCb4wKeepKBMiLq7-0QdgsWSEIY9WW0cViDA=w600'),
-                  ),
+                  _image != null
+                      ? CircleAvatar(
+                          radius: 64,
+                          backgroundImage: MemoryImage(_image!),
+                        )
+                      : const CircleAvatar(
+                          radius: 64,
+                          backgroundImage: NetworkImage(
+                            'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+                          ),
+                        ),
                   Positioned(
                     bottom: -10,
                     right: 0,
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () => selectImage(),
                       icon: const Icon(Icons.add_a_photo),
                     ),
                   )
@@ -100,7 +137,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
               // button login
               InkWell(
-                onTap: () {},
+                onTap: onSignUp,
                 child: Container(
                   width: double.infinity,
                   alignment: Alignment.center,
@@ -113,7 +150,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     color: blueColor,
                   ),
-                  child: const Text('Sign up'),
+                  child: _isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(color: primaryColor))
+                      : const Text('Sign up'),
                 ),
               ),
               Flexible(child: Container(), flex: 2),
@@ -129,7 +169,8 @@ class _SignupScreenState extends State<SignupScreen> {
                   GestureDetector(
                     onTap: () {},
                     child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 8),
                       child: const Text(
                         "Log in.",
                         style: TextStyle(fontWeight: FontWeight.bold),
