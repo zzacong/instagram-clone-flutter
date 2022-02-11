@@ -9,10 +9,18 @@ class StorageMethods {
 
   // upload image to firebase storage
   static Future<String> uploadImageToStorage(
-      String childName, Uint8List file, bool isPost) async {
-    Reference ref =
-        _storage.ref().child(childName).child(_auth.currentUser!.uid);
-    UploadTask uploadTask = ref.putData(file);
+    String childName,
+    Uint8List file,
+    String fileType,
+    bool isPost,
+  ) async {
+    Reference ref = _storage
+        .ref()
+        .child(childName)
+        .child('${_auth.currentUser!.uid}.$fileType');
+    // UploadTask uploadTask = ref.putData(file);
+    UploadTask uploadTask =
+        ref.putData(file, SettableMetadata(contentType: 'image/$fileType'));
     TaskSnapshot snap = await uploadTask;
     return await snap.ref.getDownloadURL();
   }

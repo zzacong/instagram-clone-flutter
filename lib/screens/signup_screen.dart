@@ -21,12 +21,18 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   Uint8List? _image;
+  String? _imageType;
   bool _isLoading = false;
 
   void selectImage() async {
-    Uint8List? img = await pickImage(ImageSource.gallery);
-    if (img != null) {
-      setState(() => _image = img);
+    List? obj = await pickImage(ImageSource.gallery);
+    if (obj != null) {
+      Uint8List image = obj[0];
+      String imageType = obj[1];
+      setState(() {
+        _image = image;
+        _imageType = imageType;
+      });
     }
   }
 
@@ -38,6 +44,7 @@ class _SignupScreenState extends State<SignupScreen> {
       username: _usernameController.text,
       bio: _bioController.text,
       file: _image!,
+      fileType: _imageType!,
     );
     print(res);
 
@@ -152,7 +159,13 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   child: _isLoading
                       ? const Center(
-                          child: CircularProgressIndicator(color: primaryColor))
+                          child: SizedBox(
+                              height: 16,
+                              width: 16,
+                              child: CircularProgressIndicator(
+                                color: primaryColor,
+                              )),
+                        )
                       : const Text('Sign up'),
                 ),
               ),

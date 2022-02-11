@@ -14,6 +14,7 @@ class AuthMethods {
     required String username,
     required String bio,
     required Uint8List file,
+    required String fileType,
   }) async {
     try {
       if (email.isNotEmpty &&
@@ -26,7 +27,7 @@ class AuthMethods {
         // print(cred.user.toString());
 
         String photoUrl = await StorageMethods.uploadImageToStorage(
-            'profile_pics', file, false);
+            'profile_pics', file, fileType, false);
 
         // add user to database
         await _firestore.doc('users/${cred.user!.uid}').set({
