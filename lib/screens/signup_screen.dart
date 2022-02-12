@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'dart:developer' as d;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:instagram_flutter/resources/auth_methods.dart';
 import 'package:instagram_flutter/utils/colors.dart';
 import 'package:instagram_flutter/utils/utils.dart';
+import 'package:instagram_flutter/widgets/button_spinner.dart';
 import 'package:instagram_flutter/widgets/text_field_input.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -38,7 +40,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   void onSignUp() async {
     setState(() => _isLoading = true);
-    var res = await AuthMethods.signUp(
+    final res = await AuthMethods.signUp(
       email: _emailController.text,
       password: _passwordController.text,
       username: _usernameController.text,
@@ -46,10 +48,28 @@ class _SignupScreenState extends State<SignupScreen> {
       file: _image!,
       fileType: _imageType!,
     );
-    print(res);
+    d.log('sign up: $res');
 
     setState(() => _isLoading = false);
-    if (res != 'success') {
+    if (res == 'success') {
+      setState(() {
+        _image = null;
+        _imageType = null;
+      });
+      _emailController.clear();
+      _passwordController.clear();
+      _bioController.clear();
+      _usernameController.clear();
+      // Navigator.of(context).pushReplacement(
+      //   MaterialPageRoute(
+      //     builder: (context) => const ResponsiveLayout(
+      //       mobileScreenLayout: MobileScreenLayout(),
+      //       webScreenLayout: WebScreenLayout(),
+      //     ),
+      //   ),
+      // );
+    } else {
+      // signup failed, display error
       showSnackBar(res, context);
     }
   }
@@ -158,14 +178,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     color: blueColor,
                   ),
                   child: _isLoading
-                      ? const Center(
-                          child: SizedBox(
-                              height: 16,
-                              width: 16,
-                              child: CircularProgressIndicator(
-                                color: primaryColor,
-                              )),
-                        )
+                      ? const ButtonSpinner()
                       : const Text('Sign up'),
                 ),
               ),

@@ -48,4 +48,32 @@ class AuthMethods {
       return error.toString();
     }
   }
+
+  static Future<String> signIn({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      if (email.isNotEmpty && password.isNotEmpty) {
+        UserCredential cred = await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
+        print(cred);
+        return 'success';
+      }
+      return 'invalid fields';
+    } catch (error) {
+      print(error);
+      return error.toString();
+    }
+  }
+
+  static Future<String> signOut() async {
+    try {
+      await _auth.signOut();
+      return 'success';
+    } catch (error) {
+      print(error);
+      return error.toString();
+    }
+  }
 }

@@ -1,6 +1,10 @@
+import 'dart:developer' as d;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram_flutter/resources/auth_methods.dart';
 import 'package:instagram_flutter/utils/colors.dart';
+import 'package:instagram_flutter/utils/utils.dart';
+import 'package:instagram_flutter/widgets/button_spinner.dart';
 import 'package:instagram_flutter/widgets/text_field_input.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,6 +17,33 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+
+  void onLogin() async {
+    setState(() => _isLoading = true);
+    var res = await AuthMethods.signIn(
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+    d.log('log in: $res');
+
+    setState(() => _isLoading = false);
+    if (res == 'success') {
+      _emailController.clear();
+      _passwordController.clear();
+      // Navigator.of(context).pushReplacement(
+      //   MaterialPageRoute(
+      //     builder: (context) => const ResponsiveLayout(
+      //       mobileScreenLayout: MobileScreenLayout(),
+      //       webScreenLayout: WebScreenLayout(),
+      //     ),
+      //   ),
+      // );
+    } else {
+      // login failed, display error
+      showSnackBar(res, context);
+    }
+  }
 
   @override
   void dispose() {
@@ -60,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               // button login
               InkWell(
-                onTap: () {},
+                onTap: onLogin,
                 child: Container(
                   width: double.infinity,
                   alignment: Alignment.center,
@@ -73,7 +104,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     color: blueColor,
                   ),
-                  child: const Text('Log in'),
+                  child:
+                      _isLoading ? const ButtonSpinner() : const Text('Log in'),
                 ),
               ),
               Flexible(child: Container(), flex: 2),
@@ -89,7 +121,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   GestureDetector(
                     onTap: () {},
                     child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 8),
                       child: const Text(
                         "Sign Up.",
                         style: TextStyle(fontWeight: FontWeight.bold),
