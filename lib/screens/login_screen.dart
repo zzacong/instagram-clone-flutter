@@ -2,6 +2,10 @@ import 'dart:developer' as d;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram_flutter/resources/auth_methods.dart';
+import 'package:instagram_flutter/responsive/mobile_screen_layout.dart';
+import 'package:instagram_flutter/responsive/responsive_layout_screen.dart';
+import 'package:instagram_flutter/responsive/web_screen_layout.dart';
+import 'package:instagram_flutter/screens/signup_screen.dart';
 import 'package:instagram_flutter/utils/colors.dart';
 import 'package:instagram_flutter/utils/utils.dart';
 import 'package:instagram_flutter/widgets/button_spinner.dart';
@@ -31,18 +35,29 @@ class _LoginScreenState extends State<LoginScreen> {
     if (res == 'success') {
       _emailController.clear();
       _passwordController.clear();
-      // Navigator.of(context).pushReplacement(
-      //   MaterialPageRoute(
-      //     builder: (context) => const ResponsiveLayout(
-      //       mobileScreenLayout: MobileScreenLayout(),
-      //       webScreenLayout: WebScreenLayout(),
-      //     ),
-      //   ),
-      // );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const ResponsiveLayout(
+            mobileScreenLayout: MobileScreenLayout(),
+            webScreenLayout: WebScreenLayout(),
+          ),
+        ),
+      );
     } else {
       // login failed, display error
       showSnackBar(res, context);
     }
+  }
+
+  void onSignUp() {
+    // navigate to sign up screen
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SignupScreen(),
+      ),
+    );
   }
 
   @override
@@ -119,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: const Text("Don't have an account?"),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: onSignUp,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           vertical: 8, horizontal: 8),

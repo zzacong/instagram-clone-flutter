@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:instagram_flutter/models/user.dart' as model;
 import 'package:instagram_flutter/resources/storage_methods.dart';
 
 class AuthMethods {
@@ -29,16 +30,17 @@ class AuthMethods {
         String photoUrl = await StorageMethods.uploadImageToStorage(
             'profile_pics', file, fileType, false);
 
+        final user = model.User(
+          username: username,
+          email: email,
+          uid: cred.user!.uid,
+          bio: bio,
+          photoUrl: photoUrl,
+          followers: [],
+          following: [],
+        );
         // add user to database
-        await _firestore.doc('users/${cred.user!.uid}').set({
-          'username': username,
-          'email': email,
-          'uid': cred.user!.uid,
-          'bio': bio,
-          'followers': [],
-          'following': [],
-          'photoUrl': photoUrl,
-        });
+        await _firestore.doc('users/${cred.user!.uid}').set(user.toJson());
 
         return 'success';
       }
@@ -55,9 +57,8 @@ class AuthMethods {
   }) async {
     try {
       if (email.isNotEmpty && password.isNotEmpty) {
-        UserCredential cred = await _auth.signInWithEmailAndPassword(
+        await _auth.signInWithEmailAndPassword(
             email: email, password: password);
-        print(cred);
         return 'success';
       }
       return 'invalid fields';
