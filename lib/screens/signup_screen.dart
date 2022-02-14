@@ -31,10 +31,10 @@ class _SignupScreenState extends State<SignupScreen> {
   bool _isLoading = false;
 
   void selectImage() async {
-    List? obj = await pickImage(ImageSource.gallery);
-    if (obj != null) {
-      Uint8List image = obj[0];
-      String imageType = obj[1];
+    List? l = await pickImage(ImageSource.gallery);
+    if (l != null) {
+      Uint8List image = l[0];
+      String imageType = l[1];
       setState(() {
         _image = image;
         _imageType = imageType;
