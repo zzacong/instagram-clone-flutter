@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_flutter/models/post.dart';
 import 'package:instagram_flutter/utils/colors.dart';
+import 'package:intl/intl.dart';
 
-class PostCard extends StatelessWidget {
-  const PostCard({Key? key}) : super(key: key);
+class PostCard extends StatefulWidget {
+  final Post post;
+  const PostCard({Key? key, required this.post}) : super(key: key);
 
+  @override
+  State<PostCard> createState() => _PostCardState();
+}
+
+class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -13,16 +21,12 @@ class PostCard extends StatelessWidget {
         children: [
           // Header section
           Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: 4,
-              horizontal: 16,
-            ).copyWith(right: 0),
+            padding: const EdgeInsets.symmetric(vertical: 4),
             child: Row(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 16,
-                  backgroundImage: NetworkImage(
-                      'https://lh3.googleusercontent.com/uX8Cz6XBApglUzAzHuC9jPs3Iu8Fxz1tWJHl_1jvXbkpW1Oacn8GeS0x0bbkLAWX6ueBxdnhAv9A77bBCOJJhjDSRHOFV8guf07KTQ'),
+                  backgroundImage: NetworkImage(widget.post.profileImage),
                 ),
                 Expanded(
                   child: Padding(
@@ -31,9 +35,9 @@ class PostCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'username',
-                          style: TextStyle(
+                        Text(
+                          widget.post.username,
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -78,7 +82,7 @@ class PostCard extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.35,
             width: double.infinity,
             child: Image.network(
-              'https://lh3.googleusercontent.com/ogHiNSsa2FvNaKM5jYhdst-luUWOxhwiNejGjIzcoMlmZyFj7DR5TjlUSgYIqdXbGu4uD3L1Xc40_wzqXZDetb4r9m2tGYZzPw7L',
+              widget.post.postUrl,
               fit: BoxFit.cover,
             ),
           ),
@@ -129,7 +133,7 @@ class PostCard extends StatelessWidget {
                         fontWeight: FontWeight.w800,
                       ),
                   child: Text(
-                    '1,233 likes',
+                    '${widget.post.likes.length} likes',
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ),
@@ -137,18 +141,17 @@ class PostCard extends StatelessWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.only(top: 8),
                   child: RichText(
-                    text: const TextSpan(
-                      style: TextStyle(color: primaryColor),
+                    text: TextSpan(
+                      style: const TextStyle(color: primaryColor),
                       children: [
                         TextSpan(
-                          text: 'username',
-                          style: TextStyle(
+                          text: '${widget.post.username}  ',
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         TextSpan(
-                          text:
-                              'desk mass action yesterday your supply live pen widely surface mood below having stems neighbor contain behavior lonely noted flow bow entire children fur',
+                          text: widget.post.description,
                         ),
                       ],
                     ),
@@ -158,9 +161,9 @@ class PostCard extends StatelessWidget {
                   onTap: () {},
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: const Text(
+                    child: Text(
                       'View all 200 comments',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         color: secondaryColor,
                       ),
@@ -169,9 +172,9 @@ class PostCard extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
-                  child: const Text(
-                    '03/02/2022',
-                    style: TextStyle(
+                  child: Text(
+                    DateFormat.yMMMd().format(widget.post.datePublished),
+                    style: const TextStyle(
                       fontSize: 16,
                       color: secondaryColor,
                     ),
