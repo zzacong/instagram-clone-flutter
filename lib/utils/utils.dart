@@ -5,8 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 
 Future<List?> pickImage(ImageSource source) async {
-  final ImagePicker _imagePicker = ImagePicker();
-  final file = await _imagePicker.pickImage(source: source);
+  final ImagePicker imagePicker = ImagePicker();
+  final file = await imagePicker.pickImage(source: source);
   if (file != null) {
     var type = path.extension(file.name).substring(1);
     return [await file.readAsBytes(), type];

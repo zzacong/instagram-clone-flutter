@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
 
-  void onLogin() async {
+  void _onLogin() async {
     setState(() => _isLoading = true);
     var res = await AuthMethods.signIn(
       email: _emailController.text,
@@ -50,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  void onSignUp() {
+  void _onSignUp() {
     // navigate to sign up screen
     Navigator.push(
       context,
@@ -106,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               // button login
               InkWell(
-                onTap: onLogin,
+                onTap: _onLogin,
                 child: Container(
                   width: double.infinity,
                   alignment: Alignment.center,
@@ -134,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: const Text("Don't have an account?"),
                   ),
                   GestureDetector(
-                    onTap: onSignUp,
+                    onTap: _onSignUp,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           vertical: 8, horizontal: 8),

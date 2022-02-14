@@ -30,7 +30,7 @@ class _SignupScreenState extends State<SignupScreen> {
   String? _imageType;
   bool _isLoading = false;
 
-  void selectImage() async {
+  void _onSelectImage() async {
     List? l = await pickImage(ImageSource.gallery);
     if (l != null) {
       Uint8List image = l[0];
@@ -42,7 +42,7 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
-  void onSignUp() async {
+  void _onSignUp() async {
     setState(() => _isLoading = true);
     final res = await AuthMethods.signUp(
       email: _emailController.text,
@@ -79,7 +79,7 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
-  void onLogin() {
+  void _onLogin() {
     // navigate to sign up screen
     Navigator.push(
       context,
@@ -136,7 +136,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     bottom: -10,
                     right: 0,
                     child: IconButton(
-                      onPressed: () => selectImage(),
+                      onPressed: () => _onSelectImage(),
                       icon: const Icon(Icons.add_a_photo),
                     ),
                   )
@@ -179,7 +179,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
               // button login
               InkWell(
-                onTap: onSignUp,
+                onTap: _onSignUp,
                 child: Container(
                   width: double.infinity,
                   alignment: Alignment.center,
@@ -208,7 +208,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     child: const Text("Already have an account?"),
                   ),
                   GestureDetector(
-                    onTap: onLogin,
+                    onTap: _onLogin,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                           vertical: 8, horizontal: 8),

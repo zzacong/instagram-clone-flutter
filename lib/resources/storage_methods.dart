@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:uuid/uuid.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -17,8 +18,13 @@ class StorageMethods {
     Reference ref = _storage
         .ref()
         .child(childName)
-        .child('${_auth.currentUser!.uid}.$fileType');
-    // UploadTask uploadTask = ref.putData(file);
+        .child("${_auth.currentUser!.uid}${isPost ? '' : '.$fileType'}");
+
+    if (isPost) {
+      String id = const Uuid().v4();
+      ref = ref.child("$id.$fileType");
+    }
+
     UploadTask uploadTask =
         ref.putData(file, SettableMetadata(contentType: 'image/$fileType'));
     TaskSnapshot snap = await uploadTask;

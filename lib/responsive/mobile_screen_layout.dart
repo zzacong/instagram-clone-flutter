@@ -14,11 +14,11 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   int _page = 0;
   late PageController _pageController;
 
-  void onNavigationTap(int page) {
+  void _onNavigationTap(int page) {
     _pageController.jumpToPage(page);
   }
 
-  void onPageChanged(int page) {
+  void _onPageChanged(int page) {
     setState(() => _page = page);
   }
 
@@ -40,12 +40,12 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
       body: PageView(
         children: homeScreenItems,
         controller: _pageController,
-        onPageChanged: onPageChanged,
+        onPageChanged: _onPageChanged,
         physics: const NeverScrollableScrollPhysics(),
       ),
       bottomNavigationBar: CupertinoTabBar(
         backgroundColor: mobileBackgroundColor,
-        onTap: onNavigationTap,
+        onTap: _onNavigationTap,
         items: [
           BottomNavigationBarItem(
             icon: Icon(
