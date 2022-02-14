@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:instagram_flutter/models/post.dart';
 import 'package:instagram_flutter/resources/storage_methods.dart';
 
 class FirestoreMethods {
@@ -33,6 +32,21 @@ class FirestoreMethods {
     } catch (error) {
       print(error);
       return error.toString();
+    }
+  }
+
+  static Future<void> likePost(String postId, String uid, List likes) async {
+    try {
+      if (likes.contains(uid)) {
+        return await _firestore.doc('posts/$postId').update({
+          'likes': FieldValue.arrayRemove([uid]),
+        });
+      }
+      return await _firestore.doc('posts/$postId').update({
+        'likes': FieldValue.arrayUnion([uid]),
+      });
+    } catch (error) {
+      print(error);
     }
   }
 }

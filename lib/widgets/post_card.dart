@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/models/post.dart';
 import 'package:instagram_flutter/providers/user_provider.dart';
+import 'package:instagram_flutter/resources/firestore_methods.dart';
 import 'package:instagram_flutter/utils/colors.dart';
 import 'package:instagram_flutter/widgets/like_animation.dart';
 import 'package:intl/intl.dart';
@@ -20,6 +21,7 @@ class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
+    final hasLiked = widget.post.likes.contains(user!.uid);
 
     return Container(
       color: mobileBackgroundColor,
@@ -86,7 +88,11 @@ class _PostCardState extends State<PostCard> {
 
           // Image section
           GestureDetector(
-            onDoubleTap: () => setState(() => _isLikeAnimating = true),
+            onDoubleTap: () async {
+              await FirestoreMethods.likePost(
+                  widget.post.postId, user.uid, widget.post.likes);
+              setState(() => _isLikeAnimating = true);
+            },
             child: Stack(
               alignment: Alignment.center,
               children: [
@@ -119,14 +125,21 @@ class _PostCardState extends State<PostCard> {
           Row(
             children: [
               LikeAnimation(
-                isAnimating: widget.post.likes.contains(user!.uid),
+                isAnimating: hasLiked,
                 smallLike: true,
                 child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.favorite,
-                    color: Colors.red,
-                  ),
+                  onPressed: () async {
+                    await FirestoreMethods.likePost(
+                        widget.post.postId, user.uid, widget.post.likes);
+                  },
+                  icon: hasLiked
+                      ? const Icon(
+                          Icons.favorite,
+                          color: Colors.red,
+                        )
+                      : const Icon(
+                          Icons.favorite_border,
+                        ),
                 ),
               ),
               IconButton(
