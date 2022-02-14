@@ -8,7 +8,7 @@ class Post {
   final DateTime datePublished;
   final String postUrl;
   final String profileImage;
-  final List likes;
+  final List<String> likes;
 
   const Post({
     required this.description,
@@ -34,6 +34,7 @@ class Post {
 
   static Post fromSnap(DocumentSnapshot snapshot) {
     final docData = snapshot.data() as Map<String, dynamic>;
+
     return Post(
       postId: snapshot.id,
       description: docData['description'],
@@ -42,7 +43,7 @@ class Post {
       datePublished: (docData['datePublished'] as Timestamp).toDate(),
       postUrl: docData['postUrl'],
       profileImage: docData['profileImage'],
-      likes: docData['likes'],
+      likes: List.from(docData['likes']),
     );
   }
 }
