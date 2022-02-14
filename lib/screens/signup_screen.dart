@@ -107,8 +107,8 @@ class _SignupScreenState extends State<SignupScreen> {
           width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Flexible(child: Container(), flex: 2),
+            children: [
+              Expanded(child: Container()),
 
               // svg image
               SvgPicture.asset(
@@ -120,7 +120,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
               // circular avatar widget
               Stack(
-                children: <Widget>[
+                children: [
                   _image != null
                       ? CircleAvatar(
                           radius: 64,
@@ -197,12 +197,12 @@ class _SignupScreenState extends State<SignupScreen> {
                       : const Text('Sign up'),
                 ),
               ),
-              Flexible(child: Container(), flex: 2),
+              Expanded(child: Container()),
 
               // transition to sign up
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
+                children: [
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: const Text("Already have an account?"),

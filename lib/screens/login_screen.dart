@@ -76,8 +76,8 @@ class _LoginScreenState extends State<LoginScreen> {
           width: double.infinity,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Flexible(child: Container(), flex: 2),
+            children: [
+              Expanded(child: Container()),
 
               // svg image
               SvgPicture.asset(
@@ -123,12 +123,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       _isLoading ? const ButtonSpinner() : const Text('Log in'),
                 ),
               ),
-              Flexible(child: Container(), flex: 2),
+              Expanded(child: Container()),
 
               // transition to sign up
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
+                children: [
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: const Text("Don't have an account?"),

@@ -140,7 +140,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
               ],
             ),
             body: Column(
-              children: <Widget>[
+              children: [
                 _isLoading
                     ? const LinearProgressIndicator()
                     : const Padding(padding: EdgeInsets.only(top: 0)),
@@ -148,12 +148,11 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
+                  children: [
                     CircleAvatar(
                       backgroundImage: NetworkImage(user!.photoUrl),
                     ),
-                    Flexible(
-                      flex: 1,
+                    Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: TextField(
