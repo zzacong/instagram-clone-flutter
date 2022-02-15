@@ -80,4 +80,15 @@ class FirestoreMethods {
       return error.toString();
     }
   }
+
+  static Future<String> deletePost(String postId) async {
+    try {
+      var docRef = _firestore.doc('posts/$postId');
+      await docRef.delete();
+      return 'success';
+    } catch (error) {
+      print(error);
+      return error.toString();
+    }
+  }
 }
