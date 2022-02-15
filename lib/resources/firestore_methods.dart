@@ -49,4 +49,30 @@ class FirestoreMethods {
       print(error);
     }
   }
+
+  static Future<String> postComment(
+    String postId,
+    String text,
+    String uid,
+    String username,
+    String profilePic,
+  ) async {
+    try {
+      if (text.isNotEmpty) {
+        var ref = _firestore.doc('posts/$postId').collection('comments');
+        await ref.add({
+          'text': text,
+          'uid': uid,
+          'username': username,
+          'profilePic': profilePic,
+          'datePublished': FieldValue.serverTimestamp(),
+        });
+        return 'success';
+      }
+      throw Exception('invalid fields');
+    } catch (error) {
+      print(error);
+      return error.toString();
+    }
+  }
 }

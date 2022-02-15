@@ -53,7 +53,7 @@ class AuthMethods {
 
         return 'success';
       }
-      return 'invalid fields';
+      throw Exception('invalid fields');
     } catch (error) {
       print(error);
       return error.toString();
@@ -71,7 +71,7 @@ class AuthMethods {
             email: email, password: password);
         return 'success';
       }
-      return 'invalid fields';
+      throw Exception('invalid fields');
     } catch (error) {
       print(error);
       return error.toString();

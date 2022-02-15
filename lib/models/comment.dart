@@ -1,49 +1,41 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Post {
+class Comment {
   final String id;
-  final String description;
+  final String text;
   final String uid;
   final String username;
+  final String profilePic;
   final DateTime datePublished;
-  final String postUrl;
-  final String profileImage;
-  final List<String> likes;
 
-  const Post({
+  const Comment({
     required this.id,
-    required this.description,
+    required this.text,
     required this.uid,
     required this.username,
+    required this.profilePic,
     required this.datePublished,
-    required this.postUrl,
-    required this.profileImage,
-    required this.likes,
   });
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'description': description,
+        'text': text,
         'uid': uid,
         'username': username,
+        'profilePic': profilePic,
         'datePublished': datePublished,
-        'postUrl': postUrl,
-        'profileImage': profileImage,
-        'likes': likes,
       };
 
-  static Post fromSnap(DocumentSnapshot snapshot) {
+  static Comment fromSnap(DocumentSnapshot snapshot) {
     final docData = snapshot.data() as Map<String, dynamic>;
 
-    return Post(
+    return Comment(
       id: snapshot.id,
-      description: docData['description'],
+      text: docData['text'],
       uid: docData['uid'],
       username: docData['username'],
+      profilePic: docData['profilePic'],
       datePublished: (docData['datePublished'] as Timestamp).toDate(),
-      postUrl: docData['postUrl'],
-      profileImage: docData['profileImage'],
-      likes: List.from(docData['likes']),
     );
   }
 }
