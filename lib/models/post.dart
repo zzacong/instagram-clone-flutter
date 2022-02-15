@@ -5,10 +5,11 @@ class Post {
   final String description;
   final String uid;
   final String username;
-  final DateTime datePublished;
   final String postUrl;
   final String profileImage;
+  final DateTime datePublished;
   final List<String> likes;
+  final int comments;
 
   const Post({
     required this.id,
@@ -19,6 +20,7 @@ class Post {
     required this.postUrl,
     required this.profileImage,
     required this.likes,
+    required this.comments,
   });
 
   Map<String, dynamic> toJson() => {
@@ -40,10 +42,11 @@ class Post {
       description: docData['description'],
       uid: docData['uid'],
       username: docData['username'],
-      datePublished: (docData['datePublished'] as Timestamp).toDate(),
       postUrl: docData['postUrl'],
       profileImage: docData['profileImage'],
+      datePublished: (docData['datePublished'] as Timestamp).toDate(),
       likes: List.from(docData['likes']),
+      comments: docData['comments'],
     );
   }
 }

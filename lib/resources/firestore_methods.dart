@@ -26,6 +26,7 @@ class FirestoreMethods {
         'postUrl': photoUrl,
         'profileImage': profileImage,
         'likes': [],
+        'comments': 0,
       });
 
       return 'success';
@@ -59,14 +60,18 @@ class FirestoreMethods {
   ) async {
     try {
       if (text.isNotEmpty) {
-        var ref = _firestore.doc('posts/$postId').collection('comments');
-        await ref.add({
-          'text': text,
-          'uid': uid,
-          'username': username,
-          'profilePic': profilePic,
-          'datePublished': FieldValue.serverTimestamp(),
-        });
+        var postRef = _firestore.doc('posts/$postId');
+        var commentsRef = _firestore.collection('posts/$postId/comments');
+        await Future.wait([
+          commentsRef.add({
+            'text': text,
+            'uid': uid,
+            'username': username,
+            'profilePic': profilePic,
+            'datePublished': FieldValue.serverTimestamp(),
+          }),
+          postRef.update({'comments': FieldValue.increment(1)}),
+        ]);
         return 'success';
       }
       throw Exception('invalid fields');

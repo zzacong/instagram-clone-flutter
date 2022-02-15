@@ -215,7 +215,7 @@ class _PostCardState extends State<PostCard> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Text(
-                      'View all 200 comments',
+                      'View all ${widget.post.comments} comments',
                       style: const TextStyle(
                         fontSize: 16,
                         color: secondaryColor,

@@ -6,7 +6,7 @@ class Comment {
   final String uid;
   final String username;
   final String profilePic;
-  final DateTime datePublished;
+  final DateTime? datePublished;
 
   const Comment({
     required this.id,
@@ -35,7 +35,9 @@ class Comment {
       uid: docData['uid'],
       username: docData['username'],
       profilePic: docData['profilePic'],
-      datePublished: (docData['datePublished'] as Timestamp).toDate(),
+      datePublished: docData['datePublished'] == null
+          ? null
+          : (docData['datePublished'] as Timestamp).toDate(),
     );
   }
 }

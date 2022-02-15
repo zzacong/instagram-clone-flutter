@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_flutter/models/comment.dart';
+import 'package:intl/intl.dart';
 
 class CommentCard extends StatefulWidget {
-  const CommentCard({Key? key}) : super(key: key);
+  final Comment comment;
+  const CommentCard({Key? key, required this.comment}) : super(key: key);
 
   @override
   CommentCardState createState() => CommentCardState();
@@ -16,9 +19,7 @@ class CommentCardState extends State<CommentCard> {
         children: [
           // Profile picture
           CircleAvatar(
-            backgroundImage: NetworkImage(
-              'https://lh3.googleusercontent.com/C7DErwb0ZaKb644UyXtZl016KT7KcEh0oq6R1WcEUn7zzYE6DeJTUwU-yYXGWv5mKgl_FZM7hABufK_RPB3scnHETPHVva1nXgZkQ5o',
-            ),
+            backgroundImage: NetworkImage(widget.comment.profilePic),
             radius: 18,
           ),
 
@@ -33,13 +34,13 @@ class CommentCardState extends State<CommentCard> {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: 'username  ',
+                          text: '${widget.comment.username}  ',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         TextSpan(
-                          text: 'some description to insert',
+                          text: widget.comment.text,
                         ),
                       ],
                     ),
@@ -47,16 +48,19 @@ class CommentCardState extends State<CommentCard> {
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(
-                      '23/12/2021',
-                      style: TextStyle(fontSize: 12),
+                      widget.comment.datePublished == null
+                          ? ''
+                          : DateFormat.yMd()
+                              .format(widget.comment.datePublished!),
+                      style: const TextStyle(fontSize: 12),
                     ),
                   ),
                 ],
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8),
+          const Padding(
+            padding: EdgeInsets.all(8),
             child: Icon(
               Icons.favorite,
               size: 16,

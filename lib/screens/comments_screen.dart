@@ -1,5 +1,7 @@
 import 'dart:developer' as d;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_flutter/models/comment.dart';
 import 'package:instagram_flutter/models/post.dart';
 import 'package:instagram_flutter/providers/user_provider.dart';
 import 'package:instagram_flutter/resources/firestore_methods.dart';
@@ -50,7 +52,26 @@ class _CommentsScreenState extends State<CommentsScreen> {
         title: const Text('Comments'),
         centerTitle: false,
       ),
-      body: CommentCard(),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('posts/${widget.post.id}/comments')
+            .orderBy('datePublished')
+            .snapshots(),
+        builder: (context,
+            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.active &&
+              snapshot.data != null) {
+            return ListView.builder(
+              itemCount: snapshot.data!.size,
+              itemBuilder: (context, index) => CommentCard(
+                comment: Comment.fromSnap(snapshot.data!.docs[index]),
+              ),
+            );
+          }
+
+          return const Center(child: CircularProgressIndicator());
+        },
+      ),
       bottomNavigationBar: SafeArea(
         child: Container(
           height: kToolbarHeight,
