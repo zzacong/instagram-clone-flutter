@@ -3,6 +3,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_flutter/models/post.dart';
 import 'package:instagram_flutter/models/user.dart';
+import 'package:instagram_flutter/screens/profile_screen.dart';
 import 'package:instagram_flutter/utils/colors.dart';
 import 'package:instagram_flutter/utils/constants.dart';
 
@@ -51,18 +52,27 @@ class _SearchScreenState extends State<SearchScreen> {
                   .get(),
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 }
                 return ListView.builder(
                   itemCount: snapshot.data!.size,
                   itemBuilder: (context, index) {
                     final user = User.fromSnap(snapshot.data!.docs[index]);
-                    return ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(user.photoUrl),
+                    return InkWell(
+                      onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(uid: user.uid),
+                          )),
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(user.photoUrl),
+                        ),
+                        title: Text(user.username),
                       ),
-                      title: Text(user.username),
                     );
                   },
                 );
@@ -73,7 +83,9 @@ class _SearchScreenState extends State<SearchScreen> {
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
                 }
 
                 var isWeb = MediaQuery.of(context).size.width > webScreenSize;

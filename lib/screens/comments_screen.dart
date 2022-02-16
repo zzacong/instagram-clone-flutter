@@ -69,7 +69,9 @@ class _CommentsScreenState extends State<CommentsScreen> {
             );
           }
 
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         },
       ),
       bottomNavigationBar: SafeArea(

@@ -9,6 +9,8 @@ class AuthMethods {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  static String get uid => _auth.currentUser!.uid;
+
   /// get user
   static Future<m.User> getUserDetails() async {
     User currentUser = _auth.currentUser!;
