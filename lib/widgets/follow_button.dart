@@ -18,27 +18,19 @@ class FollowButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 4),
-      child: TextButton(
-        onPressed: onPressed,
-        child: Container(
-          height: 27,
-          width: 250,
-          decoration: BoxDecoration(
-              color: backgroundColor,
-              border: Border.all(color: borderColor),
-              borderRadius: BorderRadius.circular(5)),
-          alignment: Alignment.center,
-          child: Text(
-            text,
-            style: TextStyle(
-              color: textColor,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        alignment: Alignment.center,
+        primary: backgroundColor,
+        onPrimary: textColor,
+        side: BorderSide(color: borderColor),
+        minimumSize: const Size(double.infinity, 26),
+        textStyle: const TextStyle(fontWeight: FontWeight.w600),
+        elevation: 0,
       ),
+      child: Text(text),
     );
   }
 }

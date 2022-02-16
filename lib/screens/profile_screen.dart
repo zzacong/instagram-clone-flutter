@@ -3,6 +3,7 @@ import 'package:instagram_flutter/models/post.dart';
 import 'package:instagram_flutter/models/user.dart';
 import 'package:instagram_flutter/resources/auth_methods.dart';
 import 'package:instagram_flutter/resources/firestore_methods.dart';
+import 'package:instagram_flutter/screens/login_screen.dart';
 import 'package:instagram_flutter/utils/colors.dart';
 import 'package:instagram_flutter/utils/utils.dart';
 import 'package:instagram_flutter/widgets/follow_button.dart';
@@ -58,7 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Text(
           num.toString(),
           style: const TextStyle(
-            fontSize: 18,
+            fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -67,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Text(
             label,
             style: const TextStyle(
-              fontSize: 15,
+              fontSize: 12,
               color: Colors.grey,
             ),
           ),
@@ -96,12 +97,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.grey,
-                            backgroundImage: NetworkImage(_user!.photoUrl),
-                            radius: 40,
+                          // big profile picture
+                          Container(
+                            margin: const EdgeInsets.only(right: 20),
+                            child: CircleAvatar(
+                              backgroundColor: Colors.grey,
+                              backgroundImage: NetworkImage(_user!.photoUrl),
+                              radius: 40,
+                            ),
                           ),
+
+                          // profile stats
                           Expanded(
                             child: Column(
                               children: [
@@ -115,50 +123,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         _user!.followers.length, 'Followers'),
                                     _buildStateColumn(
                                         _user!.following.length, 'Following'),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    AuthMethods.uid == widget.uid
-                                        ?
-                                        // viewing my profile
-                                        FollowButton(
-                                            text: 'Edit profile',
-                                            backgroundColor:
-                                                mobileBackgroundColor,
-                                            textColor: primaryColor,
-                                            borderColor: Colors.grey,
-                                            onPressed: () {},
-                                          )
-                                        : _isFollowing
-                                            ? FollowButton(
-                                                text: 'Unfollow',
-                                                backgroundColor: Colors.white,
-                                                textColor: Colors.black,
-                                                borderColor: Colors.grey,
-                                                onPressed: () async {
-                                                  await FirestoreMethods
-                                                      .unfollowUser(
-                                                          AuthMethods.uid,
-                                                          _user!.uid);
-                                                  _getUser();
-                                                },
-                                              )
-                                            : FollowButton(
-                                                text: 'Follow',
-                                                backgroundColor: Colors.blue,
-                                                textColor: Colors.white,
-                                                borderColor: Colors.blue,
-                                                onPressed: () async {
-                                                  await FirestoreMethods
-                                                      .followUser(
-                                                          AuthMethods.uid,
-                                                          _user!.uid);
-                                                  _getUser();
-                                                },
-                                              ),
                                   ],
                                 ),
                               ],
@@ -182,6 +146,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         alignment: Alignment.centerLeft,
                         padding: const EdgeInsets.only(top: 4),
                         child: Text(_user!.bio),
+                      ),
+
+                      // profile buttons
+                      Container(
+                        // color: Colors.red,
+                        padding: const EdgeInsets.only(top: 4),
+                        child: AuthMethods.uid == widget.uid
+                            ?
+                            // viewing my profile
+                            FollowButton(
+                                text: 'Sign Out',
+                                backgroundColor: mobileBackgroundColor,
+                                textColor: primaryColor,
+                                borderColor: Colors.grey,
+                                onPressed: () async {
+                                  await AuthMethods.signOut();
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const LoginScreen(),
+                                    ),
+                                  );
+                                },
+                              )
+                            : _isFollowing
+                                ?
+                                // unfollow user
+                                FollowButton(
+                                    text: 'Unfollow',
+                                    backgroundColor: Colors.white,
+                                    textColor: Colors.black,
+                                    borderColor: Colors.grey,
+                                    onPressed: () async {
+                                      await FirestoreMethods.unfollowUser(
+                                          AuthMethods.uid, _user!.uid);
+                                      _getUser();
+                                    },
+                                  )
+                                // follow user
+                                : FollowButton(
+                                    text: 'Follow',
+                                    backgroundColor: Colors.blue,
+                                    textColor: Colors.white,
+                                    borderColor: Colors.blue,
+                                    onPressed: () async {
+                                      await FirestoreMethods.followUser(
+                                          AuthMethods.uid, _user!.uid);
+                                      _getUser();
+                                    },
+                                  ),
                       ),
                     ],
                   ),
