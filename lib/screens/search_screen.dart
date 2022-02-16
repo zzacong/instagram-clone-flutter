@@ -30,6 +30,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isWeb = MediaQuery.of(context).size.width > webScreenSize;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: mobileBackgroundColor,
@@ -88,7 +90,6 @@ class _SearchScreenState extends State<SearchScreen> {
                   );
                 }
 
-                var isWeb = MediaQuery.of(context).size.width > webScreenSize;
                 return StaggeredGrid.count(
                   axisDirection: AxisDirection.down,
                   crossAxisCount: 3,

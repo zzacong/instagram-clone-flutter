@@ -17,8 +17,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kIsWeb) {
     await Firebase.initializeApp(options: firebaseOpts);
+  } else {
+    await Firebase.initializeApp();
   }
-  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

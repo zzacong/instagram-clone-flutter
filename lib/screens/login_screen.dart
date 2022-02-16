@@ -71,82 +71,86 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(child: Container()),
+        child: Center(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+            constraints: const BoxConstraints(maxWidth: 600),
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(child: Container()),
 
-              // svg image
-              SvgPicture.asset(
-                'assets/ic_instagram.svg',
-                color: primaryColor,
-                height: 64,
-              ),
-              const SizedBox(height: 64),
-
-              // text field input for email
-              TextFieldInput(
-                hintText: 'Enter your email',
-                textInputType: TextInputType.emailAddress,
-                controller: _emailController,
-              ),
-              const SizedBox(height: 12),
-
-              // text field input for password
-              TextFieldInput(
-                hintText: 'Enter your password',
-                textInputType: TextInputType.text,
-                controller: _passwordController,
-                isPasswd: true,
-              ),
-              const SizedBox(height: 24),
-
-              // button login
-              InkWell(
-                onTap: _onLogin,
-                child: Container(
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  decoration: const ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(4),
-                      ),
-                    ),
-                    color: blueColor,
-                  ),
-                  child:
-                      _isLoading ? const ButtonSpinner() : const Text('Log in'),
+                // svg image
+                SvgPicture.asset(
+                  'assets/ic_instagram.svg',
+                  color: primaryColor,
+                  height: 64,
                 ),
-              ),
-              Expanded(child: Container()),
+                const SizedBox(height: 64),
 
-              // transition to sign up
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: const Text("Don't have an account?"),
+                // text field input for email
+                TextFieldInput(
+                  hintText: 'Enter your email',
+                  textInputType: TextInputType.emailAddress,
+                  controller: _emailController,
+                ),
+                const SizedBox(height: 12),
+
+                // text field input for password
+                TextFieldInput(
+                  hintText: 'Enter your password',
+                  textInputType: TextInputType.text,
+                  controller: _passwordController,
+                  isPasswd: true,
+                ),
+                const SizedBox(height: 24),
+
+                // button login
+                InkWell(
+                  onTap: _onLogin,
+                  child: Container(
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    decoration: const ShapeDecoration(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(4),
+                        ),
+                      ),
+                      color: blueColor,
+                    ),
+                    child: _isLoading
+                        ? const ButtonSpinner()
+                        : const Text('Log in'),
                   ),
-                  GestureDetector(
-                    onTap: _onSignUp,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 8),
-                      child: const Text(
-                        "Sign Up.",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Expanded(child: Container()),
+
+                // transition to sign up
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: const Text("Don't have an account?"),
+                    ),
+                    GestureDetector(
+                      onTap: _onSignUp,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 8),
+                        child: const Text(
+                          "Sign Up.",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

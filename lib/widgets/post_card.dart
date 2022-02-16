@@ -4,6 +4,7 @@ import 'package:instagram_flutter/providers/user_provider.dart';
 import 'package:instagram_flutter/resources/firestore_methods.dart';
 import 'package:instagram_flutter/screens/comments_screen.dart';
 import 'package:instagram_flutter/utils/colors.dart';
+import 'package:instagram_flutter/utils/constants.dart';
 import 'package:instagram_flutter/widgets/like_animation.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -23,15 +24,24 @@ class _PostCardState extends State<PostCard> {
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
     final hasLiked = widget.post.likes.contains(user!.uid);
+    final isWeb = MediaQuery.of(context).size.width > webScreenSize;
 
     return Container(
-      color: mobileBackgroundColor,
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      margin: isWeb
+          ? const EdgeInsets.symmetric(vertical: 16)
+          : const EdgeInsets.symmetric(vertical: 0),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: isWeb ? secondaryColor : mobileBackgroundColor,
+        ),
+        color: mobileBackgroundColor,
+      ),
       child: Column(
         children: [
           // Header section
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 4),
+            padding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
             child: Row(
               children: [
                 CircleAvatar(

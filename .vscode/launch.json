@@ -20,7 +20,8 @@
       "name": "Chrome",
       "request": "launch",
       "type": "dart",
-      "deviceId": "chrome"
+      "deviceId": "chrome",
+      "args": ["--web-renderer", "html"]
     }
   ],
   "compounds": [
